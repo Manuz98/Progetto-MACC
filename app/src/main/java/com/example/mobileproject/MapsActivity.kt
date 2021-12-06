@@ -1,6 +1,7 @@
 package com.example.mobileproject
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.location.Location
@@ -79,6 +80,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 nearByPlace(location.latitude, location.longitude)
             }
         }
+        map!!.setOnMarkerClickListener { marker ->
+         //When user select marker, just get result of place assign to static variable
+         Common.currentResult = currentPlace!!.results!![Integer.parseInt(marker.snippet)]
+         //Start new activity
+         startActivity(Intent(this@MapsActivity, ViewPlace::class.java))
+            true
+        }
     }
 
     private fun placeMarkerOnMap(currentLatLong: LatLng) {
@@ -91,7 +99,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun nearByPlace(latitude: Double, longitude: Double) {
       //clear all marker on map
-      //map.clear()
+      map.clear()
       //build URL request based on location
       val url = getUrl(latitude, longitude)
 
@@ -109,7 +117,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                       markerOptions.position(latLng)
                       markerOptions.title(placeName)
                       markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospital))
-                      //markerOptions.snippet(i.toString())
+                      markerOptions.snippet(i.toString())
                       //add marker to map
                       map!!.addMarker(markerOptions)
                       //move camera
