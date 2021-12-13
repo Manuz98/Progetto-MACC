@@ -14,15 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobileproject">
         <activity
-            android:name=".ViewPlace"
-            android:exported="true" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${google_maps_key}" />
-
+            android:name=".Register"
+            android:exported="false" />
         <activity
-            android:name=".MapsActivity"
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +25,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ViewPlace"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${google_maps_key}" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:exported="true"/>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

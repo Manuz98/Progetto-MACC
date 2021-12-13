@@ -75,7 +75,7 @@ class Login : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val user: FirebaseUser? = auth.currentUser
                     //updateUI(user)
-                    startActivity(Intent(this, MapsActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                 } else {
                     //updateUI(null)
                 }
@@ -88,7 +88,7 @@ class Login : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if(currentUser != null){
-            startActivity(Intent(this, MapsActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 

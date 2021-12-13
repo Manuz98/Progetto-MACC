@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/mainBackground"
     tools:context=".Register">
 
     <TextView
@@ -14,7 +15,7 @@
         android:fontFamily="@font/aladin"
         android:text="Register"
         android:textAlignment="center"
-        android:textColor="#000000"
+        android:textColor="@color/mainText"
         android:textSize="48sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,8 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="Signup"
+        android:textColor="@color/mainBackground"
+        android:background="@drawable/btn_show_on_map"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.563"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signuppasswordrepeat" />
 
@@ -39,7 +42,9 @@
         android:layout_height="51dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="60dp"
-        android:hint="Insert email"
+        android:hint="Email"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_baseline_email_24"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.205"
@@ -51,8 +56,10 @@
         android:layout_width="200dp"
         android:layout_height="48dp"
         android:layout_marginStart="44dp"
-        android:layout_marginTop="48dp"
-        android:hint="password"
+        android:layout_marginTop="44dp"
+        android:drawableStart="@drawable/ic_baseline_lock_24"
+        android:drawablePadding="10dp"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toStartOf="@+id/signuppass_check"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,11 +70,13 @@
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="36dp"
         android:hint="Repeat password"
+        android:drawablePadding="10dp"
+        android:drawableStart="@drawable/ic_baseline_lock_24"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signuppassword" />
 

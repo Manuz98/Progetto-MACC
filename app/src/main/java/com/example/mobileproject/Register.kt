@@ -86,7 +86,7 @@ class Register : AppCompatActivity() {
                     //user?.sendEmailVerification()
                     //?.addOnCompleteListener { task ->
                     //if (task.isSuccessful) {
-                    startActivity(Intent(this, MapsActivity::class.java))
+                    startActivity(Intent(this, MainActivity::class.java))
                     finish()
                     //}
                     //}
