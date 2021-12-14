@@ -7,4 +7,6 @@
     <string name="password_blank">Insert a password</string>
     <string name="password_format_error">At least 6 characters</string>
     <string name="password_confirmation_error">Not matched passwords</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

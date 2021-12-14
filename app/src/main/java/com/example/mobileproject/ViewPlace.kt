@@ -30,6 +30,10 @@ class ViewPlace : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar!!.title = "Nearby Hospitals"
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
+
         binding = ActivityViewPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -79,6 +83,11 @@ class ViewPlace : AppCompatActivity() {
                     }
                 })
 
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun getPlaceDetailUrl(placeId: String): String {
