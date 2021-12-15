@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mobileproject</string>
+    <string name="app_name">MyDialysis</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="email_blank">Insert an email</string>

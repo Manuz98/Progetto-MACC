@@ -32,7 +32,7 @@ class ViewPlace : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar!!.title = "Nearby Hospitals"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_baseline_arrow_back_24)
 
         binding = ActivityViewPlaceBinding.inflate(layoutInflater)
         setContentView(binding.root)
