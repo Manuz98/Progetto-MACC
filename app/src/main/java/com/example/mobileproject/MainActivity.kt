@@ -44,10 +44,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lastLocation : Location
     internal lateinit var currentPlace: MyPlaces
 
+    lateinit var hospitals:ArrayList<DataModel>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        hospitals = ArrayList()
         //Initialize fused location provider client
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -62,7 +65,6 @@ class MainActivity : AppCompatActivity() {
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.mainText)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         navView.setNavigationItemSelectedListener {
 
             it.isChecked = true
@@ -71,9 +73,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
                 R.id.nav_maps -> {
                     replaceFragment(MapsFragment(), it.title.toString())
-                    //setUpMap()
                 }
-                R.id.nav_calendar -> Toast.makeText(applicationContext, "Calendar", Toast.LENGTH_SHORT).show()
+                R.id.nav_book -> {replaceFragment(RecyclerViewFragment(), it.title.toString())
+                    replaceFragment(RecyclerViewFragment(), it.title.toString())
+                }
                 R.id.nav_setting -> Toast.makeText(applicationContext, "Setting", Toast.LENGTH_SHORT).show()
                 R.id.nav_login -> Toast.makeText(applicationContext, "Login", Toast.LENGTH_SHORT).show()
             }
@@ -153,6 +156,7 @@ class MainActivity : AppCompatActivity() {
                         val lng = googlePlace.geometry!!.location!!.lng
                         val placeName = googlePlace.name
                         val latLng = LatLng(lat,lng)
+                        hospitals.add(DataModel(placeName.toString()))
                         markerOptions.position(latLng)
                         markerOptions.title(placeName)
                         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_hospital))
@@ -185,5 +189,10 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("URL_DEBUG",googlePlaceUrl.toString())
         return googlePlaceUrl.toString()
+    }
+
+    fun printHospitals(){
+        for(i in 0 until hospitals.size)
+            Log.d("mytag", hospitals.get(i).toString())
     }
 }
