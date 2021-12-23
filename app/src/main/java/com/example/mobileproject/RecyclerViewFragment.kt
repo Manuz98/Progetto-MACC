@@ -1,12 +1,15 @@
 package com.example.mobileproject
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.*
 
 /**
  * A simple [Fragment] subclass.
@@ -16,7 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
 
     private lateinit var adapter: RecyclerViewAdapter
-    var listData: ArrayList<DataModel> = ArrayList()
+    private lateinit var dbref: FirebaseFirestore
+    private lateinit var hospitalArrayList: ArrayList<HospitalModel>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,15 +36,37 @@ class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_recycler_view, container, false)
-        listData = (activity as MainActivity).hospitals
+        hospitalArrayList = arrayListOf()
         initRecyclerView(view)
+        getHospitalData()
         return view
+    }
+
+    private fun getHospitalData() {
+        dbref = FirebaseFirestore.getInstance()
+        dbref.collection("AllHospital").addSnapshotListener(object: EventListener<QuerySnapshot> {
+            override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+                if(error != null){
+                   Log.e("Firebase error", error.message.toString())
+                   return
+                }
+                for(dc: DocumentChange in value?.documentChanges!!){
+                    if(dc.type == DocumentChange.Type.ADDED){
+                        hospitalArrayList.add(dc.document.toObject(HospitalModel::class.java))
+                    }
+                }
+
+                adapter.notifyDataSetChanged()
+            }
+
+        })
+
     }
 
     private fun initRecyclerView(view : View) {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = RecyclerViewAdapter(listData, this)
+        adapter = RecyclerViewAdapter(hospitalArrayList, this)
         recyclerView.adapter = adapter
     }
 
@@ -63,7 +89,7 @@ class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
             }
     }
 
-    override fun onItemClick(dataModel: DataModel) {
+    override fun onItemClick(hospitalModel: HospitalModel) {
         TODO("Not yet implemented")
     }
 }

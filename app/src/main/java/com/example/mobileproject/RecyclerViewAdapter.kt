@@ -6,31 +6,30 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class RecyclerViewAdapter(val listData: List<DataModel>, val clickListener: ClickListener): RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
+class RecyclerViewAdapter(private val hospitalList: ArrayList<HospitalModel>, val clickListener: ClickListener): RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewAdapter.MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_row, parent, false)
         return MyViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return listData.size
-    }
-
-    class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
-      var titleTextView: TextView
-      init {
-          titleTextView = view.findViewById(R.id.titleTextView)
-      }
-    }
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.titleTextView.text = listData.get(position).title
+        holder.nameTextView.text = hospitalList[position].name
+        holder.addressTextView.text = hospitalList[position].address
         holder.itemView.setOnClickListener{
-            clickListener.onItemClick(listData.get(position))
+            clickListener.onItemClick(hospitalList[position])
         }
     }
 
+    override fun getItemCount(): Int {
+        return hospitalList.size
+    }
+
     interface ClickListener{
-        fun onItemClick(dataModel: DataModel)
+        fun onItemClick(hospitalModel: HospitalModel)
+    }
+
+    class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
+        val nameTextView: TextView = view.findViewById(R.id.hospital_name)
+        val addressTextView: TextView = view.findViewById(R.id.hospital_address)
     }
 }
