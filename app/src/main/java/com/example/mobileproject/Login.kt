@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
+import android.widget.Toast
+import com.google.android.gms.safetynet.SafetyNet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
 
 
 class Login : AppCompatActivity() {
@@ -24,6 +27,9 @@ class Login : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
 
+        loginrec.setOnClickListener{
+            recaptcha()
+        }
         //Show password checkbox listener
         logincheck.setOnClickListener{
             showPassword()
@@ -39,6 +45,26 @@ class Login : AppCompatActivity() {
 
     }
 
+
+    private var ok=false
+    private fun recaptcha() {
+        SafetyNet.getClient(this).verifyWithRecaptcha("6Ld3FM0dAAAAAKZGD4xrl1x7MHRZ0IJ5UzjqT46i")
+            .addOnSuccessListener { recaptchaTokenResponse ->
+                val captchaToken = recaptchaTokenResponse.tokenResult
+                if (captchaToken != null) {
+                    if (!captchaToken.isEmpty()) {
+                        ok=true
+                        Toast.makeText(applicationContext, "Correct captcha", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(applicationContext, "Invalid Captcha Response", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, "Failed to Load Captcha", Toast.LENGTH_SHORT).show()
+            }
+    }
     // Show Password function, used for login form
     private var passChecked : Boolean = true
     private fun showPassword(){
@@ -55,6 +81,10 @@ class Login : AppCompatActivity() {
     }
 
     private fun onLogin(){
+        if(!ok){
+            Toast.makeText(applicationContext, "Invalid Captcha Response", Toast.LENGTH_SHORT).show()
+            return
+        }
         if(loginemail.text.toString().isEmpty()){
             loginemail.error = resources.getString(R.string.email_blank)
             loginemail.requestFocus()

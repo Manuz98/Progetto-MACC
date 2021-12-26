@@ -1,5 +1,6 @@
 package com.example.mobileproject
 
+import android.R.attr
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,28 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.*
+import android.widget.*
+import java.util.*
+import com.google.android.gms.common.api.CommonStatusCodes
+
+import com.google.android.gms.common.api.ApiException
+
+import androidx.annotation.NonNull
+
+import com.google.android.gms.tasks.OnFailureListener
+
+import com.google.android.gms.safetynet.SafetyNetApi
+
+import com.google.android.gms.tasks.OnSuccessListener
+
+import com.google.android.gms.safetynet.SafetyNet
+import com.google.android.gms.safetynet.SafetyNetApi.RecaptchaTokenResponse
+import kotlinx.android.synthetic.main.activity_login.*
+import android.app.Activity
+import android.R.attr.password
+import android.R.attr.y
+
+import android.app.DatePickerDialog
 
 class Register : AppCompatActivity() {
 
@@ -22,10 +45,26 @@ class Register : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
 
-        //Show password checkbox listener
-        signuppass_check.setOnClickListener{
-            showPassword()
+        val datePicker = signupbirthdate
+
+        val today = Calendar.getInstance()
+        val text=signupmessage
+
+
+
+        today.add(Calendar.YEAR, -1);
+        datePicker.maxDate = today.getTimeInMillis()
+        datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
+            today.get(Calendar.DAY_OF_MONTH)
+
+        ) { view, year, month, day ->
+            val month = month + 1
+            val msg = "You Selected: $day/$month/$year"
+            text.setText("")
+            text.append((msg))
         }
+
+
         signupbutton.setOnClickListener{
             if(checkForm()){
                 signUpUser()
@@ -36,8 +75,17 @@ class Register : AppCompatActivity() {
 
     }
 
+
     private fun checkForm(): Boolean {
         var flag = true
+        if(signupname.text.toString() == ""){
+            signupname.error = resources.getString(R.string.name_blank)
+            flag = false
+        }
+        if(signupsurname.text.toString() == ""){
+            signupsurname.error = resources.getString(R.string.surname_blank)
+            flag = false
+        }
         if(signupemail.text.toString() == ""){
             signupemail.error = resources.getString(R.string.email_blank)
             flag = false
@@ -79,22 +127,30 @@ class Register : AppCompatActivity() {
     }
 
     private fun signUpUser(){
-        auth.createUserWithEmailAndPassword(signupemail.text.toString(),signuppassword.text.toString())
-            .addOnCompleteListener(this){ task ->
-                if(task.isSuccessful){
-                    //val user:FirebaseUser? = auth.currentUser
-                    //user?.sendEmailVerification()
-                    //?.addOnCompleteListener { task ->
-                    //if (task.isSuccessful) {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
-                    //}
-                    //}
+            auth.createUserWithEmailAndPassword(
+                signupemail.text.toString(),
+                signuppassword.text.toString()
+            )
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        //val user:FirebaseUser? = auth.currentUser
+                        //user?.sendEmailVerification()
+                        //?.addOnCompleteListener { task ->
+                        //if (task.isSuccessful) {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                        //}
+                        //}
 
-                } else {
-                    Toast.makeText(baseContext, "Signup failed"+ task.exception, Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            baseContext,
+                            "Signup failed" + task.exception,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
+
     }
 
 

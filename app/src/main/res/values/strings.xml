@@ -3,6 +3,8 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="email_blank">Insert an email</string>
+    <string name="name_blank">Insert an name</string>
+    <string name="surname_blank">Insert an surname</string>
     <string name="email_miss_error">Insert a valid email</string>
     <string name="password_blank">Insert a password</string>
     <string name="password_format_error">At least 6 characters</string>
