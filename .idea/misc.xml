@@ -11,16 +11,17 @@
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/drawable/ic_baseline_person_24.xml" value="0.17962962962962964" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/font/.xml" value="0.234375" />
-        <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_main.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_maps.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_register.xml" value="0.22" />
+        <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_reset_password.xml" value="0.22" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/activity_view_place.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/fragment_maps.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/fragment_recycler_view.xml" value="0.10677083333333333" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/nav_header.xml" value="0.22" />
         <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/layout/recycler_row.xml" value="0.25" />
-        <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/menu/nav_menu.xml" value="0.5" />
+        <entry key="..\:/Users/Donika/StudioProjects/Progetto-MACC/app/src/main/res/menu/nav_menu.xml" value="0.67" />
       </map>
     </option>
   </component>

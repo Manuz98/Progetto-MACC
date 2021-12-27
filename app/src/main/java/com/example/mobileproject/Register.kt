@@ -33,6 +33,7 @@ import android.R.attr.password
 import android.R.attr.y
 
 import android.app.DatePickerDialog
+import com.google.firebase.auth.FirebaseUser
 
 class Register : AppCompatActivity() {
 
@@ -44,13 +45,9 @@ class Register : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
-
         val datePicker = signupbirthdate
-
         val today = Calendar.getInstance()
         val text=signupmessage
-
-
 
         today.add(Calendar.YEAR, -1);
         datePicker.maxDate = today.getTimeInMillis()
@@ -111,36 +108,23 @@ class Register : AppCompatActivity() {
     }
 
 
-    // Show Password function, used for signup form
-    private var passChecked : Boolean = true
-    private fun showPassword(){
 
-        if (passChecked){
-            signuppassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
-            passChecked = !passChecked
-            return
-        }
-
-
-        signuppassword.transformationMethod = PasswordTransformationMethod.getInstance()
-        passChecked = !passChecked
-    }
 
     private fun signUpUser(){
-            auth.createUserWithEmailAndPassword(
-                signupemail.text.toString(),
-                signuppassword.text.toString()
-            )
+            auth.createUserWithEmailAndPassword(signupemail.text.toString(), signuppassword.text.toString())
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        //val user:FirebaseUser? = auth.currentUser
-                        //user?.sendEmailVerification()
-                        //?.addOnCompleteListener { task ->
-                        //if (task.isSuccessful) {
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                        //}
-                        //}
+                        val user: FirebaseUser? = auth.currentUser
+                        user?.sendEmailVerification()
+                        ?.addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Toast.makeText(applicationContext, "Send email verification", Toast.LENGTH_SHORT).show()
+                            Firebase.auth.signOut()
+                            startActivity(Intent(this, Login::class.java))
+
+
+                        }
+                        }
 
                     } else {
                         Toast.makeText(

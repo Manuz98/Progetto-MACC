@@ -41,6 +41,9 @@ class Login : AppCompatActivity() {
         swaplogsig.setOnClickListener{
             startActivity(Intent(this, Register::class.java))
         }
+        passwordrecovery.setOnClickListener{
+            startActivity(Intent(this, ResetPassword::class.java))
+        }
 
 
 
@@ -82,6 +85,8 @@ class Login : AppCompatActivity() {
     }
 
     private fun onLogin(){
+
+
         if(!ok){
             Toast.makeText(applicationContext, "Invalid Captcha Response", Toast.LENGTH_SHORT).show()
             return
@@ -101,17 +106,35 @@ class Login : AppCompatActivity() {
             loginpassword.requestFocus()
             return
         }
-        auth.signInWithEmailAndPassword(loginemail.text.toString(), loginpassword.text.toString())
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user: FirebaseUser? = auth.currentUser
-                    //updateUI(user)
-                    startActivity(Intent(this, MainActivity::class.java))
-                } else {
-                    //updateUI(null)
-                }
-            }
-    }
+
+        val user = Firebase.auth.currentUser
+
+            val emailVerified = user?.isEmailVerified
+
+                auth.signInWithEmailAndPassword(
+                    loginemail.text.toString(),
+                    loginpassword.text.toString()
+                )
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user: FirebaseUser? = auth.currentUser
+                            //updateUI(user)
+                            if(user?.isEmailVerified == true) {
+                                startActivity(Intent(this, MainActivity::class.java))
+                            }
+                            else {
+                                Toast.makeText(applicationContext, "Not email verified", Toast.LENGTH_SHORT).show()
+                                Firebase.auth.signOut()
+                            }
+                        } else {
+                            //updateUI(null)
+                            Toast.makeText(applicationContext, "Email or password incorrect", Toast.LENGTH_SHORT).show()
+
+
+                        }
+                    }
+        }
+
 
 
     public override fun onStart() {
