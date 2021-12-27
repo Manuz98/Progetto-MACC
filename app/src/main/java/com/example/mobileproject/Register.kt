@@ -33,11 +33,20 @@ import android.R.attr.password
 import android.R.attr.y
 
 import android.app.DatePickerDialog
+import android.view.View
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import android.widget.DatePicker
+
+
+
 
 class Register : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: FirebaseDatabase
+    private lateinit var reference: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +54,13 @@ class Register : AppCompatActivity() {
 
         // Initialize Firebase Auth
         auth = Firebase.auth
+        database = FirebaseDatabase.getInstance("https://project-macc-default-rtdb.europe-west1.firebasedatabase.app")
+
+        reference = database.getReference("users")
         val datePicker = signupbirthdate
         val today = Calendar.getInstance()
         val text=signupmessage
-
-        today.add(Calendar.YEAR, -1);
+        today.set(2020,11,31)
         datePicker.maxDate = today.getTimeInMillis()
         datePicker.init(today.get(Calendar.YEAR), today.get(Calendar.MONTH),
             today.get(Calendar.DAY_OF_MONTH)
@@ -64,6 +75,7 @@ class Register : AppCompatActivity() {
 
         signupbutton.setOnClickListener{
             if(checkForm()){
+
                 signUpUser()
             }
 
@@ -118,6 +130,16 @@ class Register : AppCompatActivity() {
                         user?.sendEmailVerification()
                         ?.addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            var database = Database()
+                            var name = signupname.text.toString().trim()
+                            var surname=signupsurname.text.toString().trim()
+                            var email = signupemail.text.toString().trim()
+                            var birthday = signupbirthdate
+                            val day = birthday.dayOfMonth
+                            val month = birthday.month + 1
+                            val year = birthday.year
+                            var data="$day/$month/$year"
+                            database.writeNewUser(name, surname,data,email)
                             Toast.makeText(applicationContext, "Send email verification", Toast.LENGTH_SHORT).show()
                             Firebase.auth.signOut()
                             startActivity(Intent(this, Login::class.java))
@@ -136,6 +158,8 @@ class Register : AppCompatActivity() {
                 }
 
     }
+    private fun addDataToDatabase() {
 
+    }
 
 }
