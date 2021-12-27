@@ -6,11 +6,15 @@ import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Patterns
+import android.widget.Toast
+import com.google.android.gms.safetynet.SafetyNet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_register.*
+import kotlinx.android.synthetic.main.nav_header.*
 
 
 class Login : AppCompatActivity() {
@@ -24,6 +28,9 @@ class Login : AppCompatActivity() {
         // Initialize Firebase Auth
         auth = Firebase.auth
 
+        loginrec.setOnClickListener{
+            recaptcha()
+        }
         //Show password checkbox listener
         logincheck.setOnClickListener{
             showPassword()
@@ -34,11 +41,34 @@ class Login : AppCompatActivity() {
         swaplogsig.setOnClickListener{
             startActivity(Intent(this, Register::class.java))
         }
+        passwordrecovery.setOnClickListener{
+            startActivity(Intent(this, ResetPassword::class.java))
+        }
 
 
 
     }
 
+
+    private var ok=false
+    private fun recaptcha() {
+        SafetyNet.getClient(this).verifyWithRecaptcha("6Ld3FM0dAAAAAKZGD4xrl1x7MHRZ0IJ5UzjqT46i")
+            .addOnSuccessListener { recaptchaTokenResponse ->
+                val captchaToken = recaptchaTokenResponse.tokenResult
+                if (captchaToken != null) {
+                    if (!captchaToken.isEmpty()) {
+                        ok=true
+                        Toast.makeText(applicationContext, "Correct captcha", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(applicationContext, "Invalid Captcha Response", Toast.LENGTH_SHORT).show()
+
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(applicationContext, "Failed to Load Captcha", Toast.LENGTH_SHORT).show()
+            }
+    }
     // Show Password function, used for login form
     private var passChecked : Boolean = true
     private fun showPassword(){
@@ -55,6 +85,12 @@ class Login : AppCompatActivity() {
     }
 
     private fun onLogin(){
+
+
+        if(!ok){
+            Toast.makeText(applicationContext, "Invalid Captcha Response", Toast.LENGTH_SHORT).show()
+            return
+        }
         if(loginemail.text.toString().isEmpty()){
             loginemail.error = resources.getString(R.string.email_blank)
             loginemail.requestFocus()
@@ -70,17 +106,35 @@ class Login : AppCompatActivity() {
             loginpassword.requestFocus()
             return
         }
-        auth.signInWithEmailAndPassword(loginemail.text.toString(), loginpassword.text.toString())
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user: FirebaseUser? = auth.currentUser
-                    //updateUI(user)
-                    startActivity(Intent(this, MainActivity::class.java))
-                } else {
-                    //updateUI(null)
-                }
-            }
-    }
+
+        val user = Firebase.auth.currentUser
+
+            val emailVerified = user?.isEmailVerified
+
+                auth.signInWithEmailAndPassword(
+                    loginemail.text.toString(),
+                    loginpassword.text.toString()
+                )
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user: FirebaseUser? = auth.currentUser
+                            //updateUI(user)
+                            if(user?.isEmailVerified == true) {
+                                startActivity(Intent(this, MainActivity::class.java))
+                            }
+                            else {
+                                Toast.makeText(applicationContext, "Not email verified", Toast.LENGTH_SHORT).show()
+                                Firebase.auth.signOut()
+                            }
+                        } else {
+                            //updateUI(null)
+                            Toast.makeText(applicationContext, "Email or password incorrect", Toast.LENGTH_SHORT).show()
+
+
+                        }
+                    }
+        }
+
 
 
     public override fun onStart() {
@@ -88,8 +142,13 @@ class Login : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if(currentUser != null){
+
             startActivity(Intent(this, MainActivity::class.java))
         }
+    }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
 }

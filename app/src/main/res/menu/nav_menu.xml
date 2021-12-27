@@ -20,10 +20,7 @@
         android:icon="@drawable/ic_baseline_calendar_today_24"
         android:title="Book Dialysis"/>
 
-    <item
-        android:id="@+id/nav_setting"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:title="Settings"/>
+
 
     </group>
 
@@ -32,11 +29,14 @@
         <menu>
 
             <group>
-
             <item
-             android:id="@+id/nav_login"
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_baseline_settings_24"
+                android:title="Profile"/>
+            <item
+             android:id="@+id/nav_logout"
              android:icon="@drawable/ic_baseline_login_24"
-             android:title="Login"/>
+             android:title="Logout"/>
 
             </group>
 

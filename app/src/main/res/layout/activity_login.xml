@@ -12,14 +12,13 @@
         android:layout_width="172dp"
         android:layout_height="0dp"
         android:layout_marginTop="40dp"
-        android:fontFamily="@font/aladin"
+        android:fontFamily="@font/audiowide"
         android:text="Login"
         android:textAlignment="center"
         android:textColor="@color/mainText"
-        android:textSize="48sp"
+        android:textSize="28sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,54 +26,72 @@
         android:id="@+id/loginbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/btn_show_on_map"
         android:text="Login"
         android:textColor="@color/mainBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginpassword" />
+        app:layout_constraintTop_toBottomOf="@+id/loginrec" />
 
     <EditText
         android:id="@+id/loginemail"
         android:layout_width="249dp"
         android:layout_height="51dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
         android:drawableStart="@drawable/ic_baseline_email_24"
+
         android:hint="Email"
-        android:drawablePadding="10dp"
         android:inputType="textEmailAddress"
         android:textColor="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.205"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/loginpassword"
-        android:layout_width="200dp"
+        android:layout_width="249dp"
         android:layout_height="48dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="48dp"
+
+        android:layout_marginTop="8dp"
         android:drawableStart="@drawable/ic_baseline_lock_24"
         android:hint="Password"
-        android:drawablePadding="10dp"
         android:inputType="textPassword"
         android:textColor="@color/mainText"
-        app:layout_constraintEnd_toStartOf="@+id/logincheck"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginemail" />
 
     <CheckBox
         android:id="@+id/logincheck"
-        android:layout_width="50dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="40dp"
+        android:layout_width="249dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:text="Show Password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginemail" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginpassword" />
+
+    <ImageView
+        android:id="@+id/loginrecaptcha"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/recaptcha"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logincheck" />
+
+    <CheckBox
+        android:id="@+id/loginrec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="I'm not a robot"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginrecaptcha"/>
 
     <TextView
         android:id="@+id/swaplogsig"
@@ -82,10 +99,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Not yet registered? Sign up here"
+        android:textSize="18sp"
         android:textColor="@color/mainText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
+
+    <TextView
+        android:id="@+id/passwordrecovery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Forgotten password?"
+        android:textSize="18sp"
+        android:textColor="@color/mainText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swaplogsig" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
