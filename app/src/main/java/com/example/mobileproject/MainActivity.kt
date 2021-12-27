@@ -25,6 +25,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.nav_header.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -43,11 +48,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var map : GoogleMap
     private lateinit var lastLocation : Location
     internal lateinit var currentPlace: MyPlaces
-
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         //Initialize fused location provider client
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -68,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             it.isChecked = true
 
             when(it.itemId){
+
                 R.id.nav_home -> Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
                 R.id.nav_maps -> {
                     replaceFragment(MapsFragment(), it.title.toString())
@@ -75,25 +82,36 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_book -> {
                     replaceFragment(RecyclerViewFragment(), it.title.toString())
                 }
-                R.id.nav_setting -> Toast.makeText(applicationContext, "Setting", Toast.LENGTH_SHORT).show()
-                R.id.nav_login -> Toast.makeText(applicationContext, "Login", Toast.LENGTH_SHORT).show()
+                R.id.nav_profile -> Toast.makeText(applicationContext, "Profile", Toast.LENGTH_SHORT).show()
+                R.id.nav_logout -> {
+                    Toast.makeText(applicationContext, "Logout", Toast.LENGTH_SHORT).show()
+                    Firebase.auth.signOut()
+                    startActivity(Intent(this, Login::class.java))
+                }
             }
+
             true
+
         }
+
 
     }
 
     private fun replaceFragment(fragment: Fragment, title: String){
-      val fragmentManager = supportFragmentManager
-      val fragmentTransaction = fragmentManager.beginTransaction()
-      fragmentTransaction.replace(R.id.frameLayout, fragment)
-      fragmentTransaction.commit()
-      drawerLayout.closeDrawers()
-      setTitle(title)
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, fragment)
+        fragmentTransaction.commit()
+
+        drawerLayout.closeDrawers()
+        setTitle(title)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val user = Firebase.auth.currentUser
         if(toggle.onOptionsItemSelected(item)){
+            val email=user_email
+            email.setText(user!!.email)
             return true
         }
 

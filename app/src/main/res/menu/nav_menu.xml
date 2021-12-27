@@ -18,7 +18,7 @@
     <item
         android:id="@+id/nav_book"
         android:icon="@drawable/ic_baseline_calendar_today_24"
-        android:title="Book Dialysis"/>
+        android:title="Booking Dialysis"/>
 
 
 
