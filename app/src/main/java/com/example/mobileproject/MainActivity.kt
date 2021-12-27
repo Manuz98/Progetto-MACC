@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_homepage.*
 import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import retrofit2.Call
@@ -59,7 +60,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         //Initialize fused location provider client
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
         toggle.drawerArrowDrawable.color = resources.getColor(R.color.mainText)
-
+        replaceFragment(HomeFragment(), "Home")
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         navView.setNavigationItemSelectedListener {
 
@@ -80,7 +80,10 @@ class MainActivity : AppCompatActivity() {
 
             when(it.itemId){
 
-                R.id.nav_home -> Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
+                R.id.nav_home -> {
+                    replaceFragment(HomeFragment(), it.title.toString())
+                    Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
+                }
                 R.id.nav_maps -> {
                     replaceFragment(MapsFragment(), it.title.toString())
                 }
@@ -117,6 +120,8 @@ class MainActivity : AppCompatActivity() {
         if(toggle.onOptionsItemSelected(item)){
             val email=user_email
             email.setText(user!!.email)
+            val database = Database()
+            database.getUserName(this)
             return true
         }
 
