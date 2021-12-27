@@ -6,9 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.ValueEventListener
+import com.example.mobileproject.Common.Common
+import com.example.mobileproject.Model.HospitalModel
 import com.google.firebase.firestore.*
 
 /**
@@ -52,7 +54,9 @@ class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
                 }
                 for(dc: DocumentChange in value?.documentChanges!!){
                     if(dc.type == DocumentChange.Type.ADDED){
-                        hospitalArrayList.add(dc.document.toObject(HospitalModel::class.java))
+                        var hospital: HospitalModel = dc.document.toObject(HospitalModel::class.java)
+                        hospital.hospitalId = dc.document.id
+                        hospitalArrayList.add(hospital)
                     }
                 }
 
@@ -90,6 +94,10 @@ class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
     }
 
     override fun onItemClick(hospitalModel: HospitalModel) {
-        TODO("Not yet implemented")
+        Common.currentHospital = hospitalModel
+        val recyclerViewTimeFragment = RecyclerViewTimeFragment()
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        transaction.replace(R.id.frameLayout, recyclerViewTimeFragment)
+        transaction.commit()
     }
 }
