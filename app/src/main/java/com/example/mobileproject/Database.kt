@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -19,6 +20,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_register.view.*
 import kotlinx.android.synthetic.main.fragment_homepage.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.nav_header.*
 
 
@@ -41,11 +43,25 @@ class Database {
             fragment.homename.text=it.child("name").value.toString()
         }
     }
+    fun getUserDetailProfile(fragment: ProfileFragment){
+        database!!.child("users").child(uid!!).get().addOnSuccessListener {
+            fragment.profilebirthday.setText(it.child("birthday").value.toString())
+            fragment.profilesurname.setText(it.child("surname").value.toString())
+            fragment.profilename.setText(it.child("name").value.toString())
+        }
+    }
     fun getUserName(activity: MainActivity){
         database!!.child("users").child(uid!!).get().addOnSuccessListener {
 
             activity.user_name.text=it.child("name").value.toString() +" "+ it.child("surname").value.toString()
         }
+    }
+
+    fun updateUser(name: String ,  surname: String,  birthday: String?,  email: String){
+        database!!.child("users").child(uid!!).child("name").setValue(name)
+        database!!.child("users").child(uid!!).child("surname").setValue(surname)
+        database!!.child("users").child(uid!!).child("birthday").setValue(birthday)
+        database!!.child("users").child(uid!!).child("email").setValue(email)
     }
 
 }

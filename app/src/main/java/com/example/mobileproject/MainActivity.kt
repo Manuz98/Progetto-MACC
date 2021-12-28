@@ -90,7 +90,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_book -> {
                     replaceFragment(RecyclerViewFragment(), it.title.toString())
                 }
-                R.id.nav_profile -> Toast.makeText(applicationContext, "Profile", Toast.LENGTH_SHORT).show()
+                R.id.nav_profile -> {
+                    replaceFragment(ProfileFragment(), it.title.toString())
+                }
+
                 R.id.nav_logout -> {
                     Toast.makeText(applicationContext, "Logout", Toast.LENGTH_SHORT).show()
                     Firebase.auth.signOut()
