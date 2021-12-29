@@ -19,8 +19,10 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="Profile"
+            android:textColor="@color/mainText"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -31,25 +33,27 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Name"
+            android:textColor="@color/mainText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.484"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profiletext" />
 
         <EditText
             android:id="@+id/profilename"
-            android:drawableStart="@drawable/ic_baseline_person_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_baseline_person_24"
             android:gravity="center"
             android:text=""
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilename2" />
+
         <TextView
             android:id="@+id/profilesurname2"
             android:layout_width="wrap_content"
@@ -57,17 +61,19 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Surname"
+            android:textColor="@color/mainText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilename" />
 
         <EditText
             android:id="@+id/profilesurname"
-            android:drawableStart="@drawable/ic_baseline_person_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_baseline_person_24"
             android:gravity="center"
             android:text=" "
             android:textSize="18sp"
@@ -82,17 +88,20 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Email"
+            android:textColor="@color/mainText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilesurname" />
+
         <EditText
             android:id="@+id/profileemail"
-            android:drawableStart="@drawable/ic_baseline_email_24"
-
             android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_baseline_email_24"
             android:gravity="center"
             android:text=""
             android:textSize="18sp"
@@ -109,36 +118,41 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="Birthday Date"
+            android:textColor="@color/mainText"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileemail" />
 
         <EditText
             android:id="@+id/profilebirthday"
-            android:drawableStart="@drawable/ic_baseline_date_range_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:drawableStart="@drawable/ic_baseline_date_range_24"
             android:gravity="center"
             android:text=""
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilebirthday2" />/>
+
         <Button
             android:id="@+id/profilebutton"
             android:layout_width="106dp"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="35dp"
-            android:textSize="14sp"
             android:background="@drawable/btn_show_on_map"
-            android:text="Edit profile"
             android:fontFamily="@font/audiowide"
+            android:text="Edit profile"
             android:textColor="@color/mainBackground"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profilebirthday"></Button>
 

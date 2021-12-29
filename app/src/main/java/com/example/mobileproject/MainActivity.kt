@@ -82,7 +82,6 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.nav_home -> {
                     replaceFragment(HomeFragment(), it.title.toString())
-                    Toast.makeText(applicationContext, "Home", Toast.LENGTH_SHORT).show()
                 }
                 R.id.nav_maps -> {
                     replaceFragment(MapsFragment(), it.title.toString())
