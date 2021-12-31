@@ -2,11 +2,14 @@ package com.example.mobileproject
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
@@ -21,6 +24,7 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener
 import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.fragment_time_slot.*
+import kotlinx.android.synthetic.main.layout_time_slot.view.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,20 +35,20 @@ import kotlin.collections.ArrayList
  * Use the [RecyclerViewTimeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
+class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener, MyTimeSlotAdapter.ClickListener{
 
     private lateinit var hospitalDoc: DocumentReference
     private lateinit var iTimeSlotLoadListener: ITimeSlotLoadListener
     private lateinit var dialog: AlertDialog
     //private lateinit var unbinder: Unbinder
     private lateinit var simpleDateFormat: SimpleDateFormat
-    private lateinit var selected_date: Calendar
     private lateinit var timeSlots: ArrayList<TimeSlot>
+    private lateinit var adapter: MyTimeSlotAdapter
 
-    fun displayTimeSlot(){
+    fun displayTimeSlot(view: View){
         var date: Calendar = Calendar.getInstance()
         date.add(Calendar.DATE,0)
-        loadAvailableTimeSlotOfHospital(Common.currentHospital.hospitalId.toString(),
+        loadAvailableTimeSlotOfHospital(view, Common.currentHospital.hospitalId.toString(),
             simpleDateFormat.format(date.time))
     }
 
@@ -54,15 +58,12 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
         simpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
         dialog = SpotsDialog.Builder().setContext(context).setCancelable(false).build()
         timeSlots = ArrayList()
-        displayTimeSlot()
-        selected_date = Calendar.getInstance()
-        selected_date.add(Calendar.DATE, 0) //init current date
         arguments?.let {
 
         }
     }
 
-    private fun loadAvailableTimeSlotOfHospital(hospitalId: String, bookDate: String){
+    private fun loadAvailableTimeSlotOfHospital(view: View, hospitalId: String, bookDate: String){
         dialog.show()
         hospitalDoc = FirebaseFirestore.getInstance()
             .collection("AllHospital")
@@ -85,11 +86,11 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
                                if(task.isSuccessful){
                                    val querySnapshot: QuerySnapshot = task.result
                                    if(querySnapshot.isEmpty)//if don't have any appointment
-                                        iTimeSlotLoadListener.onTimeSlotLoadEmpty()
+                                        iTimeSlotLoadListener.onTimeSlotLoadEmpty(view)
                                    else{//if have an appointment
                                         for(document: DocumentSnapshot in task.result)
                                           timeSlots.add(document.toObject(TimeSlot::class.java)!!)
-                                        iTimeSlotLoadListener.onTimeSlotLoadSuccess(timeSlots)
+                                        iTimeSlotLoadListener.onTimeSlotLoadSuccess(view,timeSlots)
                                    }
                                }
                            }
@@ -105,16 +106,13 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
            })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_time_slot, container, false)
+        displayTimeSlot(view)
         init(view)
         return view
     }
@@ -138,9 +136,9 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
 
         horizontalCalendar.calendarListener = object: HorizontalCalendarListener() {
             override fun onDateSelected(date: Calendar, position: Int){
-                if(selected_date.timeInMillis != date.timeInMillis){
-                   selected_date = date
-                   loadAvailableTimeSlotOfHospital(Common.currentHospital.hospitalId.toString(),
+                if(Common.currentDate.timeInMillis != date.timeInMillis){
+                    Common.currentDate = date
+                   loadAvailableTimeSlotOfHospital(view, Common.currentHospital.hospitalId.toString(),
                        simpleDateFormat.format(date.time))
                 }
             }
@@ -166,9 +164,10 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
             }
     }
 
-    override fun onTimeSlotLoadSuccess(timeSlotList: ArrayList<TimeSlot>) {
-        val adapter: MyTimeSlotAdapter = MyTimeSlotAdapter(context, timeSlotList)
-        recycler_time_slot.adapter = adapter
+    override fun onTimeSlotLoadSuccess(view:View, timeSlotList: ArrayList<TimeSlot>) {
+        adapter = MyTimeSlotAdapter(context, timeSlotList,this)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_time_slot)
+        recyclerView.adapter = adapter
         dialog.dismiss()
     }
 
@@ -177,9 +176,18 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener {
         dialog.dismiss()
     }
 
-    override fun onTimeSlotLoadEmpty() {
-        val adapter: MyTimeSlotAdapter = MyTimeSlotAdapter(context)
-        recycler_time_slot.adapter = adapter
+    override fun onTimeSlotLoadEmpty(view: View) {
+        adapter = MyTimeSlotAdapter(context, this)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_time_slot)
+        recyclerView.adapter = adapter
         dialog.dismiss()
+    }
+
+    override fun onItemClick(cardView: CardView) {
+        Common.currentTimeSlot = cardView.txt_time_slot.text.toString()
+        val bookingFinalFragment = BookingFinal()
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        transaction.replace(R.id.frameLayout, bookingFinalFragment)
+        transaction.commit()
     }
 }

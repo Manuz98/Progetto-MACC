@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.MyPlaces
 import com.example.mobileproject.Remote.IGoogleAPIService
-import com.example.mobileproject.databinding.ActivityMainBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -28,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_homepage.*
 import kotlinx.android.synthetic.main.nav_header.*

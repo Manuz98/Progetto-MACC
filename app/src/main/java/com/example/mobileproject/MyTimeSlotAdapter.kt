@@ -5,26 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.TimeSlot
 
-class MyTimeSlotAdapter(): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>()  {
+class MyTimeSlotAdapter(): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>(){
 
     private lateinit var timeSlotList: ArrayList<TimeSlot>
     private lateinit var context: Context
+    lateinit var clickListener: ClickListener
+    private lateinit var cardViewList: ArrayList<CardView>
 
-    constructor(contex: Context?, timeSlotLis: ArrayList<TimeSlot>) : this() {
-      timeSlotList = timeSlotLis
+    constructor(contex: Context?, timeSlotLis: ArrayList<TimeSlot>, clickListene: ClickListener) : this() {
+        timeSlotList = timeSlotLis
+        clickListener = clickListene
+        cardViewList = ArrayList()
         if (contex != null) {
             context = contex
         }
     }
 
-    constructor(contex: Context?) : this() {
+    constructor(contex: Context?, clickListene: ClickListener) : this() {
         timeSlotList = ArrayList()
+        clickListener = clickListene
+        cardViewList = ArrayList()
         if (contex != null) {
             context = contex
         }
@@ -47,10 +54,25 @@ class MyTimeSlotAdapter(): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>(
                 //Loop all time slot from server and set different color
                 var slot = Integer.parseInt(slotValue.slot.toString())
                 if(slot == position){
+                    //We will set tag for all time slot is full
+                    //So base on tag, we can set all remain card background without change full time slot
+                    holder.cardTimeSlot.tag = "DISABLE"
                     holder.descriptionTextView.text = "Full"
                     holder.cardTimeSlot.setCardBackgroundColor(ContextCompat.getColor(context, R.color.textAlt))
                 }
             }
+        }
+
+        if(!cardViewList.contains(holder.cardTimeSlot)){
+            cardViewList.add(holder.cardTimeSlot)
+        }
+
+        holder.itemView.setOnClickListener{
+            if(holder.cardTimeSlot.tag == null) {
+                clickListener.onItemClick(cardViewList[position])
+            }
+            else
+              Toast.makeText(context, "Not possible", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -58,9 +80,15 @@ class MyTimeSlotAdapter(): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>(
         return 20
     }
 
+    interface ClickListener {
+        fun onItemClick(cardView: CardView)
+    }
+
     class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
         val timeTextView: TextView = view.findViewById(R.id.txt_time_slot)
         val descriptionTextView: TextView = view.findViewById(R.id.txt_time_slot_description)
         val cardTimeSlot: CardView = view.findViewById(R.id.card_time_slot)
     }
+
+
 }
