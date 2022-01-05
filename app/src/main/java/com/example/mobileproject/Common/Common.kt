@@ -15,7 +15,7 @@ object Common {
     lateinit var currentHospital: HospitalModel
     lateinit var currentTimeSlot: String
     lateinit var currentUserNameSurname: String
-    var currentDate: Calendar = Calendar.getInstance()
+    var bookingDate: Calendar = Calendar.getInstance()
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
 
     val googleApiService:IGoogleAPIService

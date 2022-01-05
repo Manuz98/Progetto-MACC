@@ -136,8 +136,8 @@ class RecyclerViewTimeFragment : Fragment(), ITimeSlotLoadListener, MyTimeSlotAd
 
         horizontalCalendar.calendarListener = object: HorizontalCalendarListener() {
             override fun onDateSelected(date: Calendar, position: Int){
-                if(Common.currentDate.timeInMillis != date.timeInMillis){
-                    Common.currentDate = date
+                if(Common.bookingDate.timeInMillis != date.timeInMillis){
+                    Common.bookingDate = date
                    loadAvailableTimeSlotOfHospital(view, Common.currentHospital.hospitalId.toString(),
                        simpleDateFormat.format(date.time))
                 }
