@@ -1,28 +1,34 @@
 package com.example.mobileproject
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
+import android.text.TextUtils
 import android.text.format.DateUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.FragmentTransaction
+import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.BookingInformation
 import com.example.mobileproject.Remote.IBookingInfoLoadListener
+import com.example.mobileproject.Remote.IBookingInformationChangeListener
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QueryDocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import dmax.dialog.SpotsDialog
 import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import kotlinx.android.synthetic.main.fragment_homepage.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Exception
 import java.util.*
 
@@ -36,9 +42,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment(), IBookingInfoLoadListener {
+class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationChangeListener {
     val user = Firebase.auth.currentUser
     lateinit var iBookingInfoLoadListener: IBookingInfoLoadListener
+    lateinit var iBookingInformationChangeListener: IBookingInformationChangeListener
+    lateinit var dialog: AlertDialog
 
 
     override fun onCreateView(
@@ -47,20 +55,136 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener {
 
     ): View? {
         iBookingInfoLoadListener = this
+        iBookingInformationChangeListener = this
         loadUserBooking()
+        dialog = SpotsDialog.Builder().setContext(context).setCancelable(false).build()
         return inflater.inflate(R.layout.fragment_homepage, container, false)
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_home)
         val textView =homeemail
         textView.text=user!!.email
         val database = Database()
         database.getUserDetailHome(this)
+        btn_delete_booking.setOnClickListener {
+            //deleteBookingFromHospital(false)
+            showConfirmDialogBeforeDelete()
+        }
+        btn_change_booking.setOnClickListener {
+            changeBookingFromUser()
+        }
+    }
 
+    private fun showConfirmDialogBeforeDelete(){
+        var confirmDialog: AlertDialog.Builder = AlertDialog.Builder(activity)
+            .setTitle("Hey!")
+            .setMessage("Do you really want to delete your booking?")
+            .setNegativeButton("NO", object: DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    dialog!!.dismiss()
 
+                }
+            }).setPositiveButton("YES", object: DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    deleteBookingFromHospital(false) //True because we call from button change
+                }
+            })
+        confirmDialog.show()
+    }
+
+    private fun changeBookingFromUser() {
+        //Show dialog confirm
+        var confirmDialog: AlertDialog.Builder = AlertDialog.Builder(activity)
+            .setTitle("Hey!")
+            .setMessage("Do you really want to change your booking?\nYou will delete your old booking.\n\nConfirm?")
+            .setNegativeButton("NO", object: DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    dialog!!.dismiss()
+
+                }
+            }).setPositiveButton("YES", object: DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    deleteBookingFromHospital(true) //True because we call from button change
+                }
+            })
+        confirmDialog.show()
+    }
+
+    private fun deleteBookingFromHospital(isChange: Boolean) {
+        /*To delete booking, first we need delete from Hospital collection
+          After that, we will delete from User booking collection
+          And final, delete event*/
+
+        //We need load Common.currentBooking because we need some data from BookingInformation
+        if(Common.currentBooking!=null){
+           dialog.show()
+           //Get booking information in hospital object
+           var hospitalBookingInfo: DocumentReference = FirebaseFirestore.getInstance()
+               .collection("AllHospital")
+               .document(Common.currentBooking.hospitalId.toString())
+               .collection(Common.convertTimeStampToStringKey(Common.currentBooking.timestamp))
+               .document(Common.currentBooking.slot.toString())
+
+            //When we have document just delete it
+            hospitalBookingInfo.delete().addOnFailureListener(object: OnFailureListener{
+                override fun onFailure(p0: Exception) {
+                    Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
+                }
+
+            }).addOnSuccessListener(object: OnSuccessListener<Void>{
+                override fun onSuccess(p0: Void?) {
+                    //After delete on Hospital
+                    //We will start delete from User
+                    deleteBookingFromUser(isChange)
+                }
+
+            })
+        }
+        else{
+            Toast.makeText(context, "Current booking must not be null", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun deleteBookingFromUser(isChange: Boolean) {
+        //First, we need get information from user object
+        if(!TextUtils.isEmpty(Common.currentBookingId)){
+            var userBookingInfo: DocumentReference = FirebaseFirestore.getInstance()
+                .collection("User")
+                .document(user!!.email.toString())
+                .collection("Booking")
+                .document(Common.currentBookingId)
+
+            //Delete
+            userBookingInfo.delete().addOnFailureListener(object: OnFailureListener {
+                override fun onFailure(p0: Exception) {
+                    Toast.makeText(context, p0.message, Toast.LENGTH_SHORT).show()
+                }
+            }).addOnSuccessListener(object: OnSuccessListener<Void>{
+                override fun onSuccess(p0: Void?) {
+                    //After delete on User
+                    Toast.makeText(context, "Success delete booking !", Toast.LENGTH_SHORT).show()
+
+                    //Once the reservation is deleted, I put the variable to true
+                    Common.bookable = true
+
+                    //Refresh
+                    loadUserBooking()
+
+                    //Check if isChange -> Call from change button we will fired interface
+                    if(isChange)
+                        iBookingInformationChangeListener.onBookingInformationChange()
+
+                    dialog.dismiss()
+                }
+            })
+        }
+        else{
+            dialog.dismiss()
+            Toast.makeText(context, "Booking information ID must not be empty", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onResume() {
@@ -93,7 +217,7 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener {
                         if(!p0.result.isEmpty){
                             for(queryDocumentSnapshot: QueryDocumentSnapshot in p0.result){
                                 var bookingInformation: BookingInformation = queryDocumentSnapshot.toObject(BookingInformation::class.java)
-                                iBookingInfoLoadListener.onBookingInfoLoadSuccess(bookingInformation)
+                                iBookingInfoLoadListener.onBookingInfoLoadSuccess(bookingInformation, queryDocumentSnapshot.id)
                                 break //Exit loop as soon as
                             }
                         }
@@ -109,19 +233,31 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener {
     }
 
     override fun onBookingInfoLoadEmpty() {
-        card_booking_info.visibility = View.GONE
+        if(card_booking_info != null)
+           card_booking_info.visibility = View.GONE
     }
 
-    override fun onBookingInfoLoadSuccess(bookingInformation: BookingInformation) {
+    override fun onBookingInfoLoadSuccess(bookingInformation: BookingInformation, bookingId: String) {
+        Common.currentBooking = bookingInformation
+        Common.currentBookingId = bookingId
         txt_hospital.text = bookingInformation.hospitalName
         txt_hospital_address.text = bookingInformation.hospitalAddress
         var dateRemain: String = DateUtils.getRelativeTimeSpanString(bookingInformation.timestamp!!.toDate().time,
         Calendar.getInstance().timeInMillis, 0).toString()
         txt_time_remain.text = dateRemain
         card_booking_info.visibility = View.VISIBLE
+
+        dialog.dismiss()
     }
 
     override fun onBookingInfoLoadFailed(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onBookingInformationChange() {
+        //Here we will just replace HomeFragment with RecyclerViewFragment(hospital list)
+        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+        transaction.replace(R.id.frameLayout, RecyclerViewFragment())
+        transaction.commit()
     }
 }

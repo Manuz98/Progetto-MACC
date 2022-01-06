@@ -7,10 +7,10 @@
     android:layout_marginStart="16dp"
     android:background="@color/mainBackground">
     
-    <de.hdodenhof.circleimageview.CircleImageView
+    <!--<de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@color/mainText"/>
+        android:src="@color/mainText"/>-->
 
     <TextView
         android:layout_width="match_parent"

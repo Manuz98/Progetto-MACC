@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.HospitalModel
 import com.google.firebase.firestore.*
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * A simple [Fragment] subclass.
@@ -38,6 +39,7 @@ class RecyclerViewFragment : Fragment(), RecyclerViewAdapter.ClickListener {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_recycler_view, container, false)
+        (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_book)
         hospitalArrayList = arrayListOf()
         initRecyclerView(view)
         getHospitalData()

@@ -1,10 +1,12 @@
 package com.example.mobileproject.Common
 
 import androidx.cardview.widget.CardView
+import com.example.mobileproject.Model.BookingInformation
 import com.example.mobileproject.Model.HospitalModel
 import com.example.mobileproject.Model.Results
 import com.example.mobileproject.Remote.IGoogleAPIService
 import com.example.mobileproject.Remote.RetrofitClient
+import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -12,10 +14,13 @@ object Common {
     private val GOOGLE_API_URL="https://maps.googleapis.com/"
 
     var currentResult:Results?=null
+    var bookable: Boolean = false
     lateinit var currentHospital: HospitalModel
     lateinit var currentTimeSlot: String
     lateinit var currentUserNameSurname: String
     var bookingDate: Calendar = Calendar.getInstance()
+    lateinit var currentBooking: BookingInformation
+    var currentBookingId: String = ""
     var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
 
     val googleApiService:IGoogleAPIService
@@ -71,5 +76,11 @@ object Common {
             "18:30 - 19:00" -> return 19
             else -> return 10000
         }
+    }
+
+    fun convertTimeStampToStringKey(timestamp: Timestamp?): String {
+      var date: Date = timestamp!!.toDate()
+      var simpleDateFormat: SimpleDateFormat = SimpleDateFormat("dd_MM_yyyy")
+      return simpleDateFormat.format(date)
     }
 }

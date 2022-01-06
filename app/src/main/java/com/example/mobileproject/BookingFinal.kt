@@ -2,6 +2,7 @@ package com.example.mobileproject
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -28,7 +30,7 @@ import com.google.firebase.ktx.Firebase
 import dmax.dialog.SpotsDialog
 import java.lang.Exception
 import java.text.SimpleDateFormat
-import kotlinx.android.synthetic.main.nav_header.*
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 /**
@@ -40,6 +42,7 @@ class BookingFinal : Fragment() {
 
     private lateinit var simpleDateFormat: SimpleDateFormat
     lateinit var dialog: AlertDialog
+    val user = Firebase.auth.currentUser
 
     fun setData(view: View){
         val txt_booking_hospital_text:TextView = view.findViewById(R.id.txt_booking_hospital_text)
@@ -96,20 +99,7 @@ class BookingFinal : Fragment() {
             .collection(Common.simpleDateFormat.format(Common.bookingDate.time))
             .document(Common.convertStringToTimeSlot(Common.currentTimeSlot).toString())
 
-        //Write data
-        bookingdate.set(bookingInformation).addOnSuccessListener(object: OnSuccessListener<Void>{
-            override fun onSuccess(p0: Void?) {
-              addToUserBooking(bookingInformation)
-            }
-        }).addOnFailureListener(object: OnFailureListener{
-            override fun onFailure(p0: Exception) {
-                Toast.makeText(context, ""+p0.message, Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun addToUserBooking(bookingInformation: BookingInformation) {
-        val user = Firebase.auth.currentUser
+        //Check if already exist an appointment for current user
         //First create new collection
         var userBooking: CollectionReference = FirebaseFirestore.getInstance()
             .collection("User")
@@ -117,18 +107,79 @@ class BookingFinal : Fragment() {
             .collection("Booking")
 
         //Check if exist document in this collection
-        userBooking.whereEqualTo("done",false)//if have any document with field done=false
-            .get().addOnCompleteListener(object: OnCompleteListener<QuerySnapshot>{
+        var calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, 0)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+
+        var toDayTimeStamp: Timestamp = Timestamp(calendar.time)
+
+        userBooking.whereGreaterThanOrEqualTo("timestamp", toDayTimeStamp)
+            .whereEqualTo("done",false)//if have any document with field done=false
+            .limit(1)
+            .get()
+            .addOnCompleteListener(object: OnCompleteListener<QuerySnapshot>{
+                override fun onComplete(p0: Task<QuerySnapshot>) {
+                    if(p0.result.isEmpty)
+                        Common.bookable = true //Variable to check if we can book a dialysis
+                    if(Common.bookable){
+                        //Write data
+                        bookingdate.set(bookingInformation)
+                            .addOnSuccessListener(object : OnSuccessListener<Void> {
+                                override fun onSuccess(p0: Void?) {
+                                    //Here we can write a function to check
+                                    //If already exist an booking, we will prevent new booking
+                                    addToUserBooking(bookingInformation)
+                                }
+                            }).addOnFailureListener(object : OnFailureListener {
+                                override fun onFailure(p0: Exception) {
+                                    Toast.makeText(context, "" + p0.message, Toast.LENGTH_SHORT).show()
+                                }
+                            })
+                    }
+                    else{
+                        if(dialog.isShowing)
+                            dialog.dismiss()
+                        Toast.makeText(context, "You already have a reservation for today !", Toast.LENGTH_SHORT).show()
+                        val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+                        transaction.replace(R.id.frameLayout, HomeFragment())
+                        transaction.commit()
+                    }
+                }
+            })
+    }
+
+    private fun addToUserBooking(bookingInformation: BookingInformation) {
+        //First create new collection
+        var userBooking: CollectionReference = FirebaseFirestore.getInstance()
+            .collection("User")
+            .document(user!!.email.toString())
+            .collection("Booking")
+
+        //Check if exist document in this collection
+        var calendar: Calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, 0)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+
+        var toDayTimeStamp: Timestamp = Timestamp(calendar.time)
+
+        userBooking.whereGreaterThanOrEqualTo("timestamp", toDayTimeStamp)
+            .whereEqualTo("done",false)//if have any document with field done=false
+            .limit(1)
+            .get()
+            .addOnCompleteListener(object: OnCompleteListener<QuerySnapshot>{
                 override fun onComplete(p0: Task<QuerySnapshot>) {
                     if(p0.result.isEmpty){
+                        //Set data
                         userBooking.document()
                             .set(bookingInformation)
                             .addOnSuccessListener(object: OnSuccessListener<Void>{
                                 override fun onSuccess(p0: Void?) {
                                     if(dialog.isShowing)
                                         dialog.dismiss()
+                                    Common.bookable = false //Once the reservation is made, I put the variable to false
                                     Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                                    val recyclerViewFragment = RecyclerViewFragment()
                                     val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
                                     transaction.replace(R.id.frameLayout, HomeFragment())
                                     transaction.commit()
@@ -144,8 +195,7 @@ class BookingFinal : Fragment() {
                     else{
                         if(dialog.isShowing)
                             dialog.dismiss()
-                        Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
-                        val recyclerViewFragment = RecyclerViewFragment()
+                        Toast.makeText(context, "You already have a reservation for today !", Toast.LENGTH_SHORT).show()
                         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
                         transaction.replace(R.id.frameLayout, HomeFragment())
                         transaction.commit()
