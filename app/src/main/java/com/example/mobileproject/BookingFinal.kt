@@ -140,7 +140,7 @@ class BookingFinal : Fragment() {
                     else{
                         if(dialog.isShowing)
                             dialog.dismiss()
-                        Toast.makeText(context, "You already have a reservation for today !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "You already have a reservation !", Toast.LENGTH_SHORT).show()
                         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
                         transaction.replace(R.id.frameLayout, HomeFragment())
                         transaction.commit()
@@ -195,7 +195,7 @@ class BookingFinal : Fragment() {
                     else{
                         if(dialog.isShowing)
                             dialog.dismiss()
-                        Toast.makeText(context, "You already have a reservation for today !", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "You already have a reservation !", Toast.LENGTH_SHORT).show()
                         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
                         transaction.replace(R.id.frameLayout, HomeFragment())
                         transaction.commit()
