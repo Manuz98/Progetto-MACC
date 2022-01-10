@@ -18,6 +18,7 @@ object Common {
     lateinit var currentHospital: HospitalModel
     lateinit var currentTimeSlot: String
     lateinit var currentUserNameSurname: String
+    var currentTimeBooked:Long = 0
     var bookingDate: Calendar = Calendar.getInstance()
     lateinit var currentBooking: BookingInformation
     var currentBookingId: String = ""

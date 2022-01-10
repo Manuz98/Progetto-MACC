@@ -1,15 +1,21 @@
 package com.example.mobileproject
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.BookingInformation
@@ -48,7 +54,6 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
     lateinit var iBookingInformationChangeListener: IBookingInformationChangeListener
     lateinit var dialog: AlertDialog
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,6 +74,32 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
         textView.text=user!!.email
         val database = Database()
         database.getUserDetailHome(this)
+
+        Log.d("SWITCH status", (activity as MainActivity).myPreferences.getBoolean((activity as MainActivity).SWITCH_STATUS, false).toString())
+        switch_notification.isChecked = (activity as MainActivity).myPreferences.getBoolean((activity as MainActivity).SWITCH_STATUS, false)
+
+        if(Common.currentTimeBooked > 0){
+            (activity as MainActivity).myEditor.putLong((activity as MainActivity).TIME_BOOKED_STATUS, Common.currentTimeBooked)
+            (activity as MainActivity).myEditor.apply()
+        }
+        var time: Long =  (activity as MainActivity).myPreferences.getLong((activity as MainActivity).TIME_BOOKED_STATUS, 0)
+        Log.d("TIME inside home fragment", time.toString())
+
+        switch_notification.setOnClickListener {
+            if(switch_notification.isChecked) {
+                if(time > 0) {
+                    (activity as MainActivity).createAlarm()
+                    (activity as MainActivity).myEditor.putBoolean((activity as MainActivity).SWITCH_STATUS, true)
+                    (activity as MainActivity).myEditor.apply()
+                }
+            }
+            else {
+                (activity as MainActivity).cancelAlarm()
+                (activity as MainActivity).myEditor.putBoolean((activity as MainActivity).SWITCH_STATUS, false)
+                (activity as MainActivity).myEditor.apply()
+            }
+        }
+
         btn_delete_booking.setOnClickListener {
             //deleteBookingFromHospital(false)
             showConfirmDialogBeforeDelete()
@@ -167,6 +198,13 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
                     //After delete on User
                     Toast.makeText(context, "Success delete booking !", Toast.LENGTH_SHORT).show()
 
+                    Common.currentTimeBooked = 0
+
+                    (activity as MainActivity).cancelAlarm() //Delete the notification
+                    (activity as MainActivity).myEditor.putBoolean((activity as MainActivity).SWITCH_STATUS, false)
+                    (activity as MainActivity).myEditor.putLong((activity as MainActivity).TIME_BOOKED_STATUS, 0)
+                    (activity as MainActivity).myEditor.apply()
+
                     //Once the reservation is deleted, I put the variable to true
                     Common.bookable = true
 
@@ -244,7 +282,7 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
         txt_hospital_address.text = bookingInformation.hospitalAddress
         var dateRemain: String = DateUtils.getRelativeTimeSpanString(bookingInformation.timestamp!!.toDate().time,
         Calendar.getInstance().timeInMillis, 0).toString()
-        txt_time_remain.text = dateRemain
+        txt_time_remain.text = bookingInformation.time
         card_booking_info.visibility = View.VISIBLE
 
         dialog.dismiss()

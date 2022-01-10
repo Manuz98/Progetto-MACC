@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.TimeSlot
+import kotlinx.android.synthetic.main.layout_time_slot.view.*
 
 class MyTimeSlotAdapter(): RecyclerView.Adapter<MyTimeSlotAdapter.MyViewHolder>(){
 

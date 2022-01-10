@@ -1,10 +1,16 @@
 package com.example.mobileproject
 
 import android.Manifest
+import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +18,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.example.mobileproject.Common.Common
@@ -40,6 +47,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var drawerLayout: DrawerLayout
 
+    val MY_PREFS: String = "myprefs"
+    val SWITCH_STATUS: String = "switch_status"
+    val TIME_BOOKED_STATUS = "time_booked_status"
+
+    lateinit var myPreferences: SharedPreferences
+    lateinit var myEditor: SharedPreferences.Editor
+
     //Maps
     companion object {
         private const val LOCATION_REQUEST_CODE = 1
@@ -50,13 +64,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var lastLocation : Location
     internal lateinit var currentPlace: MyPlaces
     private lateinit var auth: FirebaseAuth
-
-
+    lateinit var alarmManager: AlarmManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        alarmManager = getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+
+        myPreferences = getSharedPreferences(MY_PREFS, MODE_PRIVATE)
+        myEditor = getSharedPreferences(MY_PREFS, MODE_PRIVATE).edit()
 
         //Initialize fused location provider client
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -103,6 +121,41 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    fun createAlarm(){
+        //Notifications
+        createNotificationChannel()
+        val intent: Intent = Intent(this, ReminderBroadcast::class.java)
+        val pendingIntent: PendingIntent = PendingIntent.getBroadcast(this,0,intent,0)
+        alarmManager = getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+        Log.d("TIME inside createAlarm()", myPreferences.getLong(TIME_BOOKED_STATUS, 0).toString())
+        alarmManager.set(AlarmManager.RTC_WAKEUP, myPreferences.getLong(TIME_BOOKED_STATUS, 0) - 1800000,pendingIntent)
+        Toast.makeText(this, "The notification will arrive 30 minutes earlier", Toast.LENGTH_SHORT).show()
+    }
+
+    fun cancelAlarm(){
+        val intent: Intent = Intent(this, ReminderBroadcast::class.java)
+        val pendingIntent: PendingIntent = PendingIntent.getBroadcast(this,0,intent,0)
+
+        if(alarmManager == null)
+            alarmManager = getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+
+        alarmManager.cancel(pendingIntent)
+        Toast.makeText(this, "Notification disabled", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun createNotificationChannel(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            val name:CharSequence = "MyDialysisReminderChannel"
+            val description:String = "Channel for MyDialysis Reminder"
+            val importance:Int = NotificationManager.IMPORTANCE_DEFAULT
+            val channel: NotificationChannel = NotificationChannel("notifyMyDialysis", name, importance)
+            channel.description = description
+
+            val notificationManager: NotificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     private fun replaceFragment(fragment: Fragment, title: String){

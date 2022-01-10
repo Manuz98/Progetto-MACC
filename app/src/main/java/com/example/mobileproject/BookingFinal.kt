@@ -129,6 +129,7 @@ class BookingFinal : Fragment() {
                                 override fun onSuccess(p0: Void?) {
                                     //Here we can write a function to check
                                     //If already exist an booking, we will prevent new booking
+                                    Common.currentTimeBooked = bookingDateWithourHouse.timeInMillis
                                     addToUserBooking(bookingInformation)
                                 }
                             }).addOnFailureListener(object : OnFailureListener {
