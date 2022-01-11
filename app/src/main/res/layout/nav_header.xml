@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="16dp"
-    android:layout_marginStart="16dp"
+    android:layout_marginStart="0dp"
     android:background="@color/mainBackground">
     
     <!--<de.hdodenhof.circleimageview.CircleImageView
@@ -19,6 +19,7 @@
         android:paddingTop="8dp"
         android:textSize="20dp"
         android:text="Manuel Grossi"
+        android:layout_marginStart="16dp"
         android:textColor="@color/mainText"
         android:textStyle="bold"/>
     
@@ -28,6 +29,7 @@
         android:layout_height="wrap_content"
         android:textColor="@color/mainText"
         android:textSize="16dp"
+        android:layout_marginStart="16dp"
         android:text="manuelgrossi03@gmail.com"/>
 
     <View
