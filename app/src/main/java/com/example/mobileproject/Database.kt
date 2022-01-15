@@ -8,6 +8,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_homepage.*
+import kotlinx.android.synthetic.main.fragment_homepage.homebirthday
+import kotlinx.android.synthetic.main.fragment_homepage.homename
+import kotlinx.android.synthetic.main.fragment_homepage.homesurname
+import kotlinx.android.synthetic.main.fragment_homepage1.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.nav_header.*
 
@@ -29,6 +33,7 @@ class Database {
             fragment.homebirthday.text=it.child("birthday").value.toString()
             fragment.homesurname.text=it.child("surname").value.toString()
             fragment.homename.text=it.child("name").value.toString()
+            fragment.homename1.text=it.child("name").value.toString()+" "+it.child("surname").value.toString()
         }
     }
     fun getUserDetailProfile(fragment: ProfileFragment){

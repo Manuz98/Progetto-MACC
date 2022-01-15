@@ -63,7 +63,7 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
         iBookingInformationChangeListener = this
         loadUserBooking()
         dialog = SpotsDialog.Builder().setContext(context).setCancelable(false).build()
-        return inflater.inflate(R.layout.fragment_homepage, container, false)
+        return inflater.inflate(R.layout.fragment_homepage1, container, false)
 
     }
 

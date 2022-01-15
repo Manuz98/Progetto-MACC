@@ -14,4 +14,7 @@
         <!-- Customize your theme here. -->
         <item name="titleTextColor">@color/mainText</item>
     </style>
+    <style name="Circular">
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>
