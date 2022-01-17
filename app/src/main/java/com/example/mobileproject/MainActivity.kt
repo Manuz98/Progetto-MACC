@@ -105,6 +105,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_book -> {
                     replaceFragment(RecyclerViewFragment(), it.title.toString())
                 }
+                R.id.nav_news -> {
+                    replaceFragment(RecyclerViewRegionsFragment(), it.title.toString())
+                }
                 R.id.nav_profile -> {
                     replaceFragment(ProfileFragment(), it.title.toString())
                 }

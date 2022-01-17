@@ -137,7 +137,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profilebirthday2" />/>
+            app:layout_constraintTop_toBottomOf="@+id/profilebirthday2" />
 
         <Button
             android:id="@+id/profilebutton"
@@ -147,14 +147,15 @@
             android:layout_marginBottom="35dp"
             android:background="@drawable/btn_show_on_map"
             android:fontFamily="@font/audiowide"
-            android:text="Edit profile"
+            android:text="Update"
             android:textColor="@color/mainBackground"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profilebirthday"></Button>
+            app:layout_constraintTop_toBottomOf="@+id/profilebirthday">
+        </Button>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

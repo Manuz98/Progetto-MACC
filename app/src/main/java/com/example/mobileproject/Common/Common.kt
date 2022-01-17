@@ -15,6 +15,7 @@ object Common {
 
     var currentResult:Results?=null
     var bookable: Boolean = false
+    lateinit var currentRegion: String
     lateinit var currentHospital: HospitalModel
     lateinit var currentTimeSlot: String
     lateinit var currentUserNameSurname: String
