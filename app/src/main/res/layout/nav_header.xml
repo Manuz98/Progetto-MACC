@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_marginTop="16dp"
+    android:layout_marginTop="0dp"
     android:layout_marginStart="0dp"
-    android:background="@color/mainBackground">
+    android:background="#1E90FF">
     
     <!--<de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="60dp"
@@ -19,23 +19,25 @@
         android:paddingTop="8dp"
         android:textSize="20dp"
         android:text="Manuel Grossi"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="16dp"
-        android:textColor="@color/mainText"
+        android:layout_marginBottom="5dp"
+        android:textColor="@android:color/white"
         android:textStyle="bold"/>
     
     <TextView
         android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/mainText"
+        android:textColor="@android:color/white"
         android:textSize="16dp"
         android:layout_marginStart="16dp"
-        android:text="manuelgrossi03@gmail.com"/>
+        android:text="email"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:background="@color/underline" />
 
 </LinearLayout>

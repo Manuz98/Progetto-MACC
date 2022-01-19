@@ -10,7 +10,7 @@
     android:layout_gravity="center"
     tools:context=".HomeFragment"
     xmlns:card_view="http://schemas.android.com/tools"
-    android:background="@drawable/kidney_background">
+    android:background="#1E90FF">
 
     <LinearLayout
         android:orientation="vertical"
@@ -170,7 +170,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.40"/>
+        app:layout_constraintGuide_percent="0.30"/>
 
         <LinearLayout
             android:layout_marginTop="15dp"
@@ -217,6 +217,7 @@
                         <ImageView
                             android:padding="2dp"
                             android:src="@drawable/ic_baseline_person_24"
+                            app:tint="#1E90FF"
                             android:layout_marginStart="5dp"
                             android:layout_width="30dp"
                             android:layout_height="30dp"/>
@@ -272,6 +273,7 @@
                         <ImageView
                             android:padding="2dp"
                             android:src="@drawable/ic_baseline_person_24"
+                            app:tint="#1E90FF"
                             android:layout_marginStart="5dp"
                             android:layout_width="30dp"
                             android:layout_height="30dp"/>
@@ -327,6 +329,7 @@
                         <ImageView
                             android:padding="2dp"
                             android:src="@drawable/ic_baseline_email_24"
+                            app:tint="#1E90FF"
                             android:layout_marginStart="5dp"
                             android:layout_width="30dp"
                             android:layout_height="30dp"/>
@@ -382,6 +385,7 @@
                         <ImageView
                             android:padding="2dp"
                             android:src="@drawable/ic_baseline_date_range_24"
+                            app:tint="#1E90FF"
                             android:layout_marginStart="5dp"
                             android:layout_width="30dp"
                             android:layout_height="30dp"/>
@@ -499,8 +503,8 @@
                 android:layout_centerHorizontal="true"
                 android:elevation="15dp"
                 android:padding="5dp"
-                android:src="@drawable/user"
-                app:shapeAppearanceOverlay="@style/Circular" />
+                android:src="@drawable/kidney"
+                app:shapeAppearanceOverlay="@style/Circular"/>
 
         </RelativeLayout>
 

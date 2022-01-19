@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
@@ -90,12 +91,9 @@ class RecyclerViewRegionsFragment : Fragment(), RecyclerViewRegionsAdapter.Click
     override fun onItemClick(region: String) {
         Common.currentRegion = region
         Log.d("CURRENT REGION", Common.currentRegion)
-        //Da implementare
-        /*
-        val nextpage = NextPageFragment()
+        val regionInfoFragment = RegionInfoFragment()
         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-        transaction.replace(R.id.frameLayout, nextpage)
+        transaction.replace(R.id.frameLayout, regionInfoFragment)
         transaction.commit()
-        */
     }
 }
