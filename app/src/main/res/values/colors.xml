@@ -11,5 +11,6 @@
     <color name="textAlt">#8D8F97</color>
     <color name="mainBackground">#FFFFFFFF</color>
     <color name="underline">#BDB8B8</color>
+    <color name="celeste">#1E90FF</color>
 
 </resources>
