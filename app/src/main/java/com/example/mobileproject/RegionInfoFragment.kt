@@ -1,11 +1,15 @@
 package com.example.mobileproject
 
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.mobileproject.Common.Common
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_region_info.*
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +37,76 @@ class RegionInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         region_name.text = Common.currentRegion
+        val SDK_INT = Build.VERSION.SDK_INT
+        if (SDK_INT > 8) {
+            val policy = StrictMode.ThreadPolicy.Builder()
+                .permitAll().build()
+            StrictMode.setThreadPolicy(policy)
+            //your codes here
+            //proxy to the server
+            var proxy : Proxy = Proxy()
+            var result= proxy.request()
+            val list: List<String> = listOf(*result.split(" ").toTypedArray())
+            Log.i("POLL", list[0])
+            var denominazione_regione =list[0]
+            var nuovi_positivi = list[1]
+            var dimessi_guariti = list[2]
+            var deceduti = list[3]
+            var totale_casi = list[4]
+            var current_hour=list[5]
+            var today=list[6]
+            val text=txt_positives
+            text.text = nuovi_positivi
+            val text1=txt_discharged
+            text1.text = dimessi_guariti
+            val text2=txt_deceased
+            text2.text = deceduti
+            val text3=txt_cases
+            text3.text = totale_casi
+            val text4=last_update
+            text4.text = today +" "+current_hour
+
+            Log.i("RESULT", result)
+            btn_update_info.setOnClickListener{
+                var result2= proxy.update()
+                Log.i("UPDATE", result2)
+                val list: List<String> = listOf(*result2.split(" ").toTypedArray())
+                Log.i("POLL", list[0])
+                var denominazione_regione =list[0]
+                var nuovi_positivi = list[1]
+                var dimessi_guariti = list[2]
+                var deceduti = list[3]
+                var totale_casi = list[4]
+                var current_hour=list[5]
+                var today=list[6]
+                val text=txt_positives
+                text.text = nuovi_positivi
+                val text1=txt_discharged
+                text1.text = dimessi_guariti
+                val text2=txt_deceased
+                text2.text = deceduti
+                val text3=txt_cases
+                text3.text = totale_casi
+                val text4=last_update
+                text4.text = today +" "+current_hour
+            }
+
+            btn_delete_info.setOnClickListener{
+                var result3= proxy.delete()
+                Log.i("DELETE", result3)
+
+                val text=txt_positives
+                text.text = "n/A"
+                val text1=txt_discharged
+                text1.text = "n/A"
+                val text2=txt_deceased
+                text2.text = "n/A"
+                val text3=txt_cases
+                text3.text = "n/A"
+                val text4=last_update
+                text4.text = "n/A"
+            }
+        }
     }
 
     companion object {

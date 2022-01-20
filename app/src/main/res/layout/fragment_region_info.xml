@@ -58,9 +58,6 @@
                     android:layout_height="wrap_content">
 
                     <androidx.cardview.widget.CardView
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        xmlns:tools="http://schemas.android.com/tools"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="15dp"
@@ -111,9 +108,9 @@
                                 android:layout_marginBottom="20dp">
 
                                 <TextView
-                                    android:text="\u2022 New positives:"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="match_parent"
+                                    android:text="\u2022 New positives:" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -132,9 +129,9 @@
                                 android:layout_marginBottom="20dp">
 
                                 <TextView
-                                    android:text="\u2022 Discharged healed:"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"/>
+                                    android:layout_height="match_parent"
+                                    android:text="\u2022 Discharged healed:" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -170,7 +167,8 @@
                             <LinearLayout
                                 android:orientation="horizontal"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="20dp">>
 
                                 <TextView
                                     android:text="\u2022 Total cases:"
@@ -184,6 +182,26 @@
                                     android:layout_marginLeft="8dp"
                                     android:text="number"
                                     android:id="@+id/txt_cases"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:text="\u2022 Last update:"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textStyle="bold"
+                                    android:layout_marginLeft="8dp"
+                                    android:text="number"
+                                    android:id="@+id/last_update"/>
 
                             </LinearLayout>
 
