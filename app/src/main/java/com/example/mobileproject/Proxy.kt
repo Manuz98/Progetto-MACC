@@ -10,8 +10,10 @@ import javax.net.ssl.HttpsURLConnection
 
 class Proxy {
     fun request(): String {
-        val name =
-            "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion
+        var name = "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion
+        if (Common.currentRegion=="Friuli Venezia Giulia" ){
+            name = "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion.substring(0,20)}
+
         val url = URL(name)
         val conn = url.openConnection() as HttpsURLConnection
         try {
@@ -32,8 +34,9 @@ class Proxy {
     }
 
     fun update(): String {
-        val name =
-            "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion
+        var name = "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion
+        if (Common.currentRegion=="Friuli Venezia Giulia" ){
+            name = "https://donika29.pythonanywhere.com/request?regione="+ Common.currentRegion.substring(0,20)}
         val url = URL(name)
         val conn = url.openConnection() as HttpsURLConnection
         try {
@@ -54,15 +57,16 @@ class Proxy {
     }
 
     fun delete(): String {
-        val name =
-            "https://donika29.pythonanywhere.com/delete?regione="+ Common.currentRegion
+        var name = "https://donika29.pythonanywhere.com/delete?regione="+ Common.currentRegion
+        if (Common.currentRegion=="Friuli Venezia Giulia" ){
+            name = "https://donika29.pythonanywhere.com/delete?regione="+ Common.currentRegion.substring(0,20)}
         val url = URL(name)
         val conn = url.openConnection() as HttpsURLConnection
         try {
 
             conn.run {
                 requestMethod = "POST"
-                Log.i("POLL", InputStreamReader(inputStream).readText())
+                Log.i("DELETE", InputStreamReader(inputStream).readText())
                 return InputStreamReader(inputStream).readText()
 
 

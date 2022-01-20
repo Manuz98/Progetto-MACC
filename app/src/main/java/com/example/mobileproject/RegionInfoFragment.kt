@@ -47,7 +47,7 @@ class RegionInfoFragment : Fragment() {
             //proxy to the server
             var proxy : Proxy = Proxy()
             var result= proxy.request()
-            val list: List<String> = listOf(*result.split(" ").toTypedArray())
+            val list: List<String> = listOf(*result.split("*").toTypedArray())
             Log.i("POLL", list[0])
             var denominazione_regione =list[0]
             var nuovi_positivi = list[1]
@@ -69,13 +69,35 @@ class RegionInfoFragment : Fragment() {
 
             Log.i("RESULT", result)
             btn_update_info.setOnClickListener{
-                if(txt_positives.text == "n/A")
-                    Toast.makeText(context,"You have deleted the info so you need to reload the page",Toast.LENGTH_SHORT).show()
+                if(txt_positives.text == "n/A"){
+                    Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
+                    var result4= proxy.request()
+                    Log.i("CREATE", result4)
+                    val list2: List<String> = listOf(*result4.split("*").toTypedArray())
+                    Log.i("POLL", list2[0])
+                    var denominazione_regione =list2[0]
+                    var nuovi_positivi = list2[1]
+                    var dimessi_guariti = list2[2]
+                    var deceduti = list2[3]
+                    var totale_casi = list2[4]
+                    var current_hour=list2[5]
+                    var today=list2[6]
+                    val text=txt_positives
+                    text.text = nuovi_positivi
+                    val text1=txt_discharged
+                    text1.text = dimessi_guariti
+                    val text2=txt_deceased
+                    text2.text = deceduti
+                    val text3=txt_cases
+                    text3.text = totale_casi
+                    val text4=last_update
+                    text4.text = today +" "+current_hour
+                }
                 else{
                     Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
                     var result2= proxy.update()
                     Log.i("UPDATE", result2)
-                    val list: List<String> = listOf(*result2.split(" ").toTypedArray())
+                    val list: List<String> = listOf(*result2.split("*").toTypedArray())
                     Log.i("POLL", list[0])
                     var denominazione_regione =list[0]
                     var nuovi_positivi = list[1]
