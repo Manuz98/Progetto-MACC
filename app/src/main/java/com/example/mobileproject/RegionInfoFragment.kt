@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.mobileproject.Common.Common
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.fragment_region_info.*
@@ -68,33 +69,38 @@ class RegionInfoFragment : Fragment() {
 
             Log.i("RESULT", result)
             btn_update_info.setOnClickListener{
-                var result2= proxy.update()
-                Log.i("UPDATE", result2)
-                val list: List<String> = listOf(*result2.split(" ").toTypedArray())
-                Log.i("POLL", list[0])
-                var denominazione_regione =list[0]
-                var nuovi_positivi = list[1]
-                var dimessi_guariti = list[2]
-                var deceduti = list[3]
-                var totale_casi = list[4]
-                var current_hour=list[5]
-                var today=list[6]
-                val text=txt_positives
-                text.text = nuovi_positivi
-                val text1=txt_discharged
-                text1.text = dimessi_guariti
-                val text2=txt_deceased
-                text2.text = deceduti
-                val text3=txt_cases
-                text3.text = totale_casi
-                val text4=last_update
-                text4.text = today +" "+current_hour
+                if(txt_positives.text == "n/A")
+                    Toast.makeText(context,"You have deleted the info so you need to reload the page",Toast.LENGTH_SHORT).show()
+                else{
+                    Toast.makeText(context,"Updated",Toast.LENGTH_SHORT).show()
+                    var result2= proxy.update()
+                    Log.i("UPDATE", result2)
+                    val list: List<String> = listOf(*result2.split(" ").toTypedArray())
+                    Log.i("POLL", list[0])
+                    var denominazione_regione =list[0]
+                    var nuovi_positivi = list[1]
+                    var dimessi_guariti = list[2]
+                    var deceduti = list[3]
+                    var totale_casi = list[4]
+                    var current_hour=list[5]
+                    var today=list[6]
+                    val text=txt_positives
+                    text.text = nuovi_positivi
+                    val text1=txt_discharged
+                    text1.text = dimessi_guariti
+                    val text2=txt_deceased
+                    text2.text = deceduti
+                    val text3=txt_cases
+                    text3.text = totale_casi
+                    val text4=last_update
+                    text4.text = today +" "+current_hour
+                }
             }
 
             btn_delete_info.setOnClickListener{
+                Toast.makeText(context,"Deleted",Toast.LENGTH_SHORT).show()
                 var result3= proxy.delete()
                 Log.i("DELETE", result3)
-
                 val text=txt_positives
                 text.text = "n/A"
                 val text1=txt_discharged
