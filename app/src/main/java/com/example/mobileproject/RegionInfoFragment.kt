@@ -56,6 +56,9 @@ class RegionInfoFragment : Fragment() {
             var totale_casi = list[4]
             var current_hour=list[5]
             var today=list[6]
+            var bulletin=list[7]
+            val text7=txt_bulletin
+            text7.text = bulletin
             val text=txt_positives
             text.text = nuovi_positivi
             val text1=txt_discharged
@@ -82,8 +85,11 @@ class RegionInfoFragment : Fragment() {
                     var totale_casi = list2[4]
                     var current_hour=list2[5]
                     var today=list2[6]
+                    var bulletin=list2[7]
                     val text=txt_positives
                     text.text = nuovi_positivi
+                    val text7=txt_bulletin
+                    text7.text = bulletin
                     val text1=txt_discharged
                     text1.text = dimessi_guariti
                     val text2=txt_deceased
@@ -106,6 +112,9 @@ class RegionInfoFragment : Fragment() {
                     var totale_casi = list[4]
                     var current_hour=list[5]
                     var today=list[6]
+                    var bulletin=list[7]
+                    val text7=txt_bulletin
+                    text7.text = bulletin
                     val text=txt_positives
                     text.text = nuovi_positivi
                     val text1=txt_discharged
