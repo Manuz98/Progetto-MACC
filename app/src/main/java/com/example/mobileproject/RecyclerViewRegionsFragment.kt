@@ -1,6 +1,8 @@
 package com.example.mobileproject
 
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mobileproject.Common.Common
 import com.example.mobileproject.Model.HospitalModel
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_region_info.*
 
 /**
  * A simple [Fragment] subclass.
@@ -53,12 +56,15 @@ class RecyclerViewRegionsFragment : Fragment(), RecyclerViewRegionsAdapter.Click
             "Sardegna",
             "Sicilia",
             "Toscana",
-            "Trentino-Alto Adige",
+            "P.A. Trento",
             "Umbria",
             "Valle d'Aosta",
             "Veneto"
         )
         initRecyclerView(view)
+
+
+
         return view
     }
 
@@ -95,5 +101,6 @@ class RecyclerViewRegionsFragment : Fragment(), RecyclerViewRegionsAdapter.Click
         val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
         transaction.replace(R.id.frameLayout, regionInfoFragment)
         transaction.commit()
+
     }
 }
