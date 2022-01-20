@@ -7,10 +7,12 @@
     android:layout_marginStart="0dp"
     android:background="#1E90FF">
     
-    <!--<de.hdodenhof.circleimageview.CircleImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@color/mainText"/>-->
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/kidney"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -19,7 +21,7 @@
         android:paddingTop="8dp"
         android:textSize="20dp"
         android:text="Manuel Grossi"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="5dp"
         android:textColor="@android:color/white"

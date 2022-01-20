@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.20"/>
+            app:layout_constraintGuide_begin="120dp" />
 
         <LinearLayout
             app:layout_constraintTop_toTopOf="parent"
@@ -82,9 +82,8 @@
                                 android:layout_marginBottom="20dp">
 
                                 <com.example.mobileproject.CovidView
-                                    android:layout_width="60dp"
-                                    android:layout_height="60dp"/>
-
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"/>
                                 <!--
                                 <ImageView
                                     android:padding="2dp"

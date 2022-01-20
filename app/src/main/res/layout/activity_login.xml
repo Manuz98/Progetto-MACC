@@ -41,7 +41,6 @@
         android:layout_marginTop="30dp"
         android:drawableStart="@drawable/ic_baseline_email_24"
         android:drawablePadding="10dp"
-
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textColor="@color/mainText"

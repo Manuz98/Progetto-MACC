@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
@@ -35,6 +37,15 @@ import kotlinx.android.synthetic.main.nav_header.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import kotlinx.android.synthetic.main.fragment_homepage.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_homepage.btn_change_booking
+import kotlinx.android.synthetic.main.fragment_homepage.btn_delete_booking
+import kotlinx.android.synthetic.main.fragment_homepage.card_booking_info
+import kotlinx.android.synthetic.main.fragment_homepage.homeemail
+import kotlinx.android.synthetic.main.fragment_homepage.switch_notification
+import kotlinx.android.synthetic.main.fragment_homepage.txt_hospital
+import kotlinx.android.synthetic.main.fragment_homepage.txt_hospital_address
+import kotlinx.android.synthetic.main.fragment_homepage.txt_time_remain
+import kotlinx.android.synthetic.main.fragment_homepage1.*
 import java.lang.Exception
 import java.util.*
 
@@ -107,6 +118,9 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
         btn_change_booking.setOnClickListener {
             changeBookingFromUser()
         }
+
+        val rotate: Animation = AnimationUtils.loadAnimation(context,R.anim.rotate)
+        image_home.startAnimation(rotate)
     }
 
     private fun showConfirmDialogBeforeDelete(){
