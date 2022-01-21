@@ -81,6 +81,7 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).setTitle("Home")
         (activity as MainActivity).nav_view.setCheckedItem(R.id.nav_home)
         val textView =homeemail
         textView.text=user!!.email
