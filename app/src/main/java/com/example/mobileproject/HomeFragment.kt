@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
 import android.text.TextUtils
 import android.text.format.DateUtils
 import android.util.Log
@@ -312,4 +313,5 @@ class HomeFragment : Fragment(), IBookingInfoLoadListener, IBookingInformationCh
         transaction.replace(R.id.frameLayout, RecyclerViewFragment())
         transaction.commit()
     }
+
 }
